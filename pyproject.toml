@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "twitter-smh"
+version = "0.0.1"
+description = "Collecting and analysing Twitter data on the project #ichbinsophiescholl"
+authors = ["lguenth <mail@lukeguenther.de>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+tweepy = "^4.4.0"
+
+[tool.poetry.dev-dependencies]
+tweepy = "^4.4.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
