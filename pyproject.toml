@@ -1,15 +1,22 @@
 [tool.poetry]
-name = "twitter-smh"
+name = "twittersmh"
 version = "0.0.1"
 description = "Collecting and analysing Twitter data on the project #ichbinsophiescholl"
 authors = ["lguenth <mail@lukeguenther.de>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.8,<=3.9"
 tweepy = "^4.4.0"
+Flask = "^2.0.2"
+numpy = "^1.21.4"
+pandas = "^1.3.4"
+google-api-python-client = "^2.33.0"
+google-auth-httplib2 = "^0.1.0"
+google-auth-oauthlib = "^0.4.6"
 
 [tool.poetry.dev-dependencies]
 tweepy = "^4.4.0"
+autopep8 = "^1.6.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

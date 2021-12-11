@@ -5,7 +5,8 @@ from credentials import bearer_token, consumer_key, consumer_secret, access_toke
 import pandas as pd
 import datetime
 
-api = tweepy.Client(bearer_token=bearer_token, consumer_key=consumer_key, consumer_secret=consumer_secret, access_token=access_token, access_token_secret=access_token_secret, wait_on_rate_limit=True)
+api = tweepy.Client(bearer_token=bearer_token, consumer_key=consumer_key, consumer_secret=consumer_secret,
+                    access_token=access_token, access_token_secret=access_token_secret, wait_on_rate_limit=True)
 
 query = "Sophie Scholl OR #ichbinsophiescholl"
 
@@ -16,11 +17,13 @@ end_time = now - datetime.timedelta(seconds=900)
 end_time = end_time.isoformat(sep="T", timespec="seconds")
 
 # https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-recent
-tweet_fields = ["author_id", "created_at", "lang", "text", "entities", "in_reply_to_user_id"]
+tweet_fields = ["author_id", "created_at", "lang",
+                "text", "entities", "in_reply_to_user_id"]
 user_fields = []
 expansions = ["author_id"]
 
-search_results = api.search_recent_tweets(query=query, tweet_fields=tweet_fields, end_time=end_time)
+search_results = api.search_recent_tweets(
+    query=query, tweet_fields=tweet_fields, end_time=end_time)
 
 old_corpus = pd.read_csv("data/corpus.csv")
 new_corpus = []
@@ -36,10 +39,11 @@ for result in search_results.data:
     # user_name = result.author_id.username
     # user_screen_name = result.author_id.name
 
-    line = {"created_at": created_at, "tweet_id": tweet_id, "text": text, "user_name": user_name, "user_screen_name": user_screen_name, "user_id": user_id, "hashtags": hashtags, "user_mentions": user_mentions, "lang": lang}
+    line = {"created_at": created_at, "tweet_id": tweet_id, "text": text, "user_name": user_name,
+            "user_screen_name": user_screen_name, "user_id": user_id, "hashtags": hashtags, "user_mentions": user_mentions, "lang": lang}
 
     if line not in new_corpus and line not in old_corpus:
-    	new_corpus.append(line)
+        new_corpus.append(line)
 
 corpus_df = pd.DataFrame(new_corpus)
 corpus_df = df.sort_values(by="created_at")

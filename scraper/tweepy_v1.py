@@ -26,14 +26,14 @@ for result in search_results:
     user_name = result._json["user"]["name"]
     lang = result._json["lang"]
 
-    line = {"created_at": created_at, "text": text, "user_name": user_name, "user_screen_name": user_screen_name, "user_id": user_id, "hashtags": hashtags, "user_mentions": user_mentions, "lang": lang}
+    line = {"created_at": created_at, "text": text, "user_name": user_name, "user_screen_name": user_screen_name,
+            "user_id": user_id, "hashtags": hashtags, "user_mentions": user_mentions, "lang": lang}
 
     corpus.append(line)
 
 corpus_df = pd.DataFrame(corpus)
 corpus_df.to_csv("data/tweepy_corpus.csv", mode="a", index=False, header=False)
 print(corpus_df.head())
-
 
 
 # TODO Implement lists of urls, users etc; catch exception if empty
