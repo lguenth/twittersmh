@@ -4,3 +4,4 @@ credentials.py
 .vscode
 .streamlit
 secrets
+.ipynb_checkpoints
