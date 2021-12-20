@@ -43,5 +43,3 @@ corpus_df.to_csv("data/tweepy_v1_corpus.csv", mode="a", index=False, header=Fals
 # in_reply_to_user_id and/or in_reply_to_screen_name would be nice too
 
 # V1.1 keys in search_tweets._json: created_at, id, id_str, full_text, truncated, display_text_range, entities, metadata, source, in_reply_to_status_id, in_reply_to_status_id_str, in_reply_to_user_id, in_reply_to_user_id_str, in_reply_to_screen_name, user, geo, coordinates, place, contributors, is_quote_status, retweet_count, favorite_count, favorited, retweeted, lang
-
-# V2 parameters for search_recent_tweets: [query,start_time,end_time,since_id,until_id,max_results,next_token,expansions,tweet.fields,media.fields,poll.fields,place.fields,user.fields]

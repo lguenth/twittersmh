@@ -16,6 +16,7 @@ gspread-pandas = "^2.3.1"
 jupyter = "^1.0.0"
 matplotlib = "^3.5.1"
 seaborn = "^0.11.2"
+searchtweets = "^1.7.6"
 
 [tool.poetry.dev-dependencies]
 tweepy = "^4.4.0"
