@@ -1,30 +1,137 @@
 #!/usr/bin/env python3
 
-from datetime import date, timezone, datetime
+# import csv
 import tweepy
-from tweepy import user
-from credentials import bearer_token, consumer_key, consumer_secret
 import pandas as pd
-import json
+import pickle as pkl
+from time import sleep
+from credentials import bearer_token
 
-status = json.load("../data/current_status.json")
-current_id = status.current_id
+client = tweepy.Client(
+    bearer_token=bearer_token,
+    wait_on_rate_limit=True,
+)
 
-client = tweepy.Client(bearer_token=bearer_token, consumer_key=consumer_key,
-                       consumer_secret=consumer_secret, wait_on_rate_limit=True)
+query = "Sophie Scholl OR Weiße Rose OR ichbinsophiescholl OR teamsoffer OR nichtsophiescholl OR SophieScholl OR WeißeRose OR Ich bin Sophie Scholl OR sophiescholl100 OR Ich bin nicht Sophie Scholl OR 100JahreSophieScholl"
 
-query = "Sophie Scholl OR Weiße Rose OR ichbinsophiescholl OR teamsoffer OR nichtsophiescholl OR SophieScholl OR WeißeRose OR 'Ich bin Sophie Scholl' OR sophiescholl100 OR 'Ich bin nicht Sophie Scholl' OR 100JahreSophieScholl"
+tweet_fields = [
+    "id",
+    "text",
+    "author_id",
+    "conversation_id",
+    "created_at",
+    "entities",
+    "geo",
+    "lang",
+    "in_reply_to_user_id",
+    "referenced_tweets",
+    "public_metrics",
+]
 
-tweet_fields = ["id", "text", "author_id", "conversation_id", "created_at", "entities",
-                "geo", "lang", "in_reply_to_user_id", "referenced_tweets", "public_metrics", "organic_metrics"]
-user_fields = ["id", "name", "username", "public_metrics", "protected"]
-expansions = ["author_id", "referenced_tweets.id", "in_reply_to_user_id", "attachments.media_keys",
-              "attachments.poll_ids", "geo.place_id", "entities.mentions.username", "referenced_tweets.id.author_id"]
-place_fields = ["full_name", "id", "country_code", "place_type", "geo"]
-media_fields = [""]
+user_fields = [
+    "id",
+    "name",
+    "username",
+]
 
-now = datetime.now(timezone.utc).astimezone().isoformat()
+expansions = [
+    "author_id",
+    "geo.place_id",
+    "entities.mentions.username",
+    "referenced_tweets.id.author_id",
+]
 
-# This uses the https://api.twitter.com/2/tweets/search/all endpoint:
-search_results = client.search_all_tweets(
-    query=query, start_time="2021-01-01T00:00:00+01:00", end_time=now, tweet_fields=tweet_fields, expansions=expansions, media_fields=media_fields, user_fields=user_fields, place_fields=place_fields, since_id=current_id)
+corpus_pickle = (
+    "/home/lukel/projekte/twittersmh/data/raw_payloads/tweepy_archive_corpus.pkl"
+)
+corpus_df_pickle = (
+    "/home/lukel/projekte/twittersmh/data/raw_payloads/tweepy_archive_corpus_df.pkl"
+)
+response_pickle = (
+    "/home/lukel/projekte/twittersmh/data/raw_payloads/tweepy_archive_responses.pkl"
+)
+
+corpus = []
+expansion_list = []
+
+responses = tweepy.Paginator(
+    client.search_all_tweets,
+    query=query,
+    start_time="2021-01-01T00:00:00+00:00",
+    tweet_fields=tweet_fields,
+    expansions=expansions,
+    user_fields=user_fields,
+    max_results=100,
+)
+
+count = 1
+for response in responses:
+    for tweet in response.data:
+
+        if tweet.id:
+            tweet_id = tweet.id
+        if tweet.conversation_id:
+            conversation_id = tweet.conversation_id
+        if tweet.author_id:
+            author_id = tweet.author_id
+        if tweet.entities:
+            entities = tweet.entities
+        if tweet.public_metrics:
+            public_metrics = tweet.public_metrics
+        if tweet.text:
+            text = tweet.text
+        if tweet.lang:
+            lang = tweet.lang
+        if tweet.referenced_tweets:
+            referenced_tweets = tweet.referenced_tweets
+        if tweet.created_at:
+            created_at = tweet.created_at
+
+        line = {
+            "created_at": created_at,
+            "tweet_id": tweet_id,
+            "text": text,
+            "conversation_id": conversation_id,
+            "author_id": author_id,
+            "entities": entities,
+            "public_metrics": public_metrics,
+            "referenced_tweets": referenced_tweets,
+            "lang": lang,
+        }
+
+        corpus.append(line)
+        print(count)
+        print(line)
+
+    count += 1
+    expansion_list.append(response.includes)
+    print("Sleeping...")
+    sleep(1)
+
+corpus_df = pd.DataFrame(corpus)
+expansions_df = pd.DataFrame(expansion_list)
+
+corpus_df.to_csv(
+    "/home/lukel/projekte/twittersmh/data/tweepy_v2_corpus.csv",
+    mode="a",
+    index=False,
+    header=False,
+    sep=";",
+)
+
+expansions_df.to_csv(
+    "/home/lukel/projekte/twittersmh/data/tweepy_v2_expansions.csv",
+    mode="a",
+    index=False,
+    header=False,
+    sep=";",
+)
+
+with open(corpus_pickle, "wb") as file1:
+    pkl.dump(corpus, file1)
+
+with open(corpus_df_pickle, "wb") as file2:
+    pkl.dump(corpus_df, file2)
+
+with open(response_pickle, "wb") as file3:
+    pkl.dump(responses, file3)

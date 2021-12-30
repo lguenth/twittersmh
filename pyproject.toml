@@ -17,6 +17,12 @@ jupyter = "^1.0.0"
 matplotlib = "^3.5.1"
 seaborn = "^0.11.2"
 searchtweets = "^1.7.6"
+black = "^21.12b0"
+bokeh = "^2.4.2"
+nltk = "^3.6.6"
+gensim = "^4.1.2"
+spacy = "^3.2.1"
+searchtweets-v2 = "^1.1.1"
 
 [tool.poetry.dev-dependencies]
 tweepy = "^4.4.0"

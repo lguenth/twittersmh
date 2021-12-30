@@ -9,7 +9,7 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
-query = "Sophie Scholl OR #ichbinsophiescholl OR Weiße Rose OR #teamsoffer OR #nichtsophiescholl OR White Rose"
+query = "Sophie Scholl OR Weiße Rose OR ichbinsophiescholl OR teamsoffer OR nichtsophiescholl OR SophieScholl OR WeißeRose OR Ich bin Sophie Scholl OR sophiescholl100 OR Ich bin nicht Sophie Scholl OR 100JahreSophieScholl"
 
 # https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-recent
 
@@ -32,7 +32,8 @@ for result in search_results:
     corpus.append(line)
 
 corpus_df = pd.DataFrame(corpus)
-corpus_df.to_csv("data/tweepy_v1_corpus.csv", mode="a", index=False, header=False)
+corpus_df.to_csv("data/tweepy_v1_corpus.csv",
+                 mode="a", index=False, header=False)
 # print(corpus_df.head())
 
 
