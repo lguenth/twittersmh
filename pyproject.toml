@@ -23,6 +23,8 @@ nltk = "^3.6.6"
 gensim = "^4.1.2"
 spacy = "^3.2.1"
 searchtweets-v2 = "^1.1.1"
+tqdm = "^4.62.3"
+emoji = "^1.6.1"
 
 [tool.poetry.dev-dependencies]
 tweepy = "^4.4.0"
