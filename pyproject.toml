@@ -25,6 +25,7 @@ spacy = "^3.2.1"
 searchtweets-v2 = "^1.1.1"
 tqdm = "^4.62.3"
 emoji = "^1.6.1"
+voila = "^0.3.0"
 
 [tool.poetry.dev-dependencies]
 tweepy = "^4.4.0"

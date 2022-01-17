@@ -1,17 +1,36 @@
 #!/usr/bin/env python3
 
-# import csv
 import tweepy
 import pandas as pd
 from time import sleep
 from credentials import bearer_token
+
+# https://developer.twitter.com/en/docs/twitter-api/conversation-id
 
 client = tweepy.Client(
     bearer_token=bearer_token,
     wait_on_rate_limit=True,
 )
 
-query = "Sophie Scholl OR Weiße Rose OR ichbinsophiescholl OR teamsoffer OR nichtsophiescholl OR SophieScholl OR WeißeRose OR Ich bin Sophie Scholl OR sophiescholl100 OR Ich bin nicht Sophie Scholl OR 100JahreSophieScholl"
+corpus = "/home/lukel/projekte/twittersmh/data/tweepy_corpus_raw.csv"
+
+corpus_df = pd.read_csv(
+    corpus,
+    sep=";",
+    header=None,
+    dtype=object,
+    names=[
+        "created_at",
+        "tweet_id",
+        "text",
+        "conversation_id",
+        "author_id",
+        "entities",
+        "public_metrics",
+        "referenced_tweets",
+        "lang",
+    ],
+)
 
 tweet_fields = [
     "id",
@@ -33,25 +52,20 @@ user_fields = [
     "username",
 ]
 
-expansions = [
-    "author_id",
-    "geo.place_id",
-    "entities.mentions.username",
-    "referenced_tweets.id.author_id",
-]
-
 corpus = []
-expansion_list = []
 
-responses = tweepy.Paginator(
-    client.search_all_tweets,
-    query=query,
-    start_time="2021-01-01T00:00:00+00:00",
-    tweet_fields=tweet_fields,
-    expansions=expansions,
-    user_fields=user_fields,
-    max_results=100,
-)
+for conversation_id in corpus_df["conversation_id"]:
+    query = f"conversation_id:{conversation_id}"
+
+    responses = tweepy.Paginator(
+        client.search_all_tweets,
+        query=query,
+        start_time="2021-01-01T00:00:00+00:00",
+        tweet_fields=tweet_fields,
+        expansions=expansions,
+        user_fields=user_fields,
+        max_results=100,
+    )
 
 count = 1
 for response in responses:
@@ -88,28 +102,19 @@ for response in responses:
             "lang": lang,
         }
 
-        corpus.append(line)
+        threads.append(line)
         print(count)
         print(line)
 
     count += 1
-    expansion_list.append(response.includes)
     print("Sleeping...")
     sleep(1)
 
-corpus_df = pd.DataFrame(corpus)
-expansions_df = pd.DataFrame(expansion_list)
+thread_df = pd.DataFrame(threads)
+thread_df.groupby(["conversation_id"])
 
-corpus_df.to_csv(
-    "/home/lukel/projekte/twittersmh/data/tweepy_corpus_raw.csv",
-    mode="a",
-    index=False,
-    header=False,
-    sep=";",
-)
-
-expansions_df.to_csv(
-    "/home/lukel/projekte/twittersmh/data/tweepy_expansions.csv",
+thread_df.to_csv(
+    "/home/lukel/projekte/twittersmh/data/tweepy_corpus_threads.csv",
     mode="a",
     index=False,
     header=False,

@@ -20,8 +20,6 @@ api = tweepy.API(
 
 query = "Sophie Scholl OR Weiße Rose OR ichbinsophiescholl OR teamsoffer OR nichtsophiescholl"
 
-# https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-recent
-
 search_results = api.search_full_archive(
     label="fulldev",
     query=query,

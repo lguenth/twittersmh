@@ -8,7 +8,7 @@ import pandas as pd
 
 
 def main():
-    corpus = "/home/lukel/projekte/twittersmh/data/tweepy_corpus_cleaned.csv"
+    corpus = "/home/lukel/projekte/twittersmh/data/tweepy_corpus_de_cleaned.csv"
 
     if "index" not in st.session_state:
         st.session_state.index = 0
