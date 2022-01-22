@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-# import csv
 import tweepy
 import pandas as pd
 from time import sleep
@@ -8,7 +7,7 @@ from credentials import bearer_token
 
 client = tweepy.Client(
     bearer_token=bearer_token,
-    wait_on_rate_limit=True,
+    wait_on_rate_limit=True,  # see: https://developer.twitter.com/en/docs/twitter-api/rate-limits
 )
 
 query = "Sophie Scholl OR Weiße Rose OR ichbinsophiescholl OR teamsoffer OR nichtsophiescholl OR SophieScholl OR WeißeRose OR Ich bin Sophie Scholl OR sophiescholl100 OR Ich bin nicht Sophie Scholl OR 100JahreSophieScholl"
