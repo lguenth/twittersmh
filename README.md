@@ -1,5 +1,3 @@
-# Oh, Twitter... SMH!
+# twittersmh – Twitter meets History 💬
 
-Three students collecting and analysing Twitter data on the project #ichbinsophiescholl. In collaboration with [Social Media History](https://smh.blogs.uni-hamburg.de/) from the University of Hamburg.
-
-https://github.com/lguenth/twittersmh
+Just a student collecting and analysing Twitter data on the project #ichbinsophiescholl. In collaboration with the [Social Media History project](https://smh.blogs.uni-hamburg.de/) from the University of Hamburg.
